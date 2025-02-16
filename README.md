@@ -3,10 +3,10 @@
 
 *MidairImagingInUnity*は空中像の一部特性をリアルタイムに再現するシステムです。
 [株式会社パリティ・イノベーションズ社のパリティミラー](https://www.piq.co.jp/about.html)や、[株式会社アスカネットのAska3Dプレート](https://www.asukanet.co.jp/contents/product/aerialimaging.html)などの光学素子でできる空中像の様子を再現します
-本システムの再現する空中像の特性は、空中での結像、遮蔽矛盾、視域です。
-迷光や空中像の輝度、光学素子内での反射等による解像度の低下は再現していません。
+迷光は再現していません。
 
-https://github.com/user-attachments/assets/0ded3781-2099-46cb-8fd3-c42284d39d97
+https://github.com/user-attachments/assets/18a8d64a-3726-41e7-bbea-fde8a8fed1a1
+
 
 ## バージョン
 本アセットは以下の環境に対応しています。
