@@ -27,5 +27,29 @@ namespace UECMediaDesignLab.MidairImagingTools
             // MMAPのスケールを設定する
             mmap.localScale = new Vector3(-1f, 1f, 1f) * mmapScale;
         }
+
+        // 空中像の結像位置を計算して返す
+        public Vector3 GetMidairImagePosition()
+        {
+            // MMAPの法線ベクトル
+            var normal = mmap.transform.forward;
+            // MMAPの位置からディスプレイの位置へのベクトル
+            var diff = mmap.transform.position - display.transform.position;
+            // 鏡面からの反射ベクトル
+            var reflection = Vector3.Reflect(diff, normal);
+            // 空中像の結像位置
+            var midairImagePosition = mmap.transform.position - reflection;
+
+            return midairImagePosition;
+        }
+
+        // 空中像の飛び出し距離を返す
+        public float GetPopoutDistance()
+        {
+            // 空中像の飛び出し距離は光源とMMAPの間の距離に等しい
+            var popoutDistance = Vector3.Distance(display.transform.position, mmap.transform.position);
+
+            return popoutDistance;
+        }
     }
 }

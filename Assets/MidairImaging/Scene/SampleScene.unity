@@ -329,6 +329,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4490615723132095620, guid: 6370cfedb2baadc45881d16c71fcd3a7, type: 3}
+      propertyPath: blurIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4644118953123805990, guid: 6370cfedb2baadc45881d16c71fcd3a7, type: 3}
+      propertyPath: isSimulatingLuminance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4644118953123805990, guid: 6370cfedb2baadc45881d16c71fcd3a7, type: 3}
+      propertyPath: isSimulatingSharpness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8687005501393495026, guid: 6370cfedb2baadc45881d16c71fcd3a7, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1467011600}
     - target: {fileID: 8806534979367263585, guid: 6370cfedb2baadc45881d16c71fcd3a7, type: 3}
       propertyPath: mainCamera
       value: 

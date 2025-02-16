@@ -8,8 +8,7 @@ namespace UECMediaDesignLab.MidairImagingTools
     public class MidairImageCameraController : MonoBehaviour
     {
         // 視点
-        [SerializeField]
-        Camera mainCamera = null;
+        public Camera mainCamera = null;
         // 光源を撮影するカメラ
         [SerializeField]
         Camera virtualCamera = null;
@@ -18,6 +17,9 @@ namespace UECMediaDesignLab.MidairImagingTools
         Transform image = null;
 
         private MidairImageMmapController mimc;
+
+        // ユーザーの視点位置の情報
+        private UserAngle userAngle;
 
         public void SetMimc(MidairImageMmapController mimc)
         {
@@ -34,6 +36,9 @@ namespace UECMediaDesignLab.MidairImagingTools
             image.LookAt(mainCamera.transform.position, this.transform.up);
             // 光源画像を貼るオブジェクトのスケールを設定
             image.localScale = Vector3.one * mimc.magnification;
+
+            // ユーザーの視点位置を計算
+            CalculateUserAngle();
         }
 
         // Virtual Cameraを視点カメラに対応した位置に配置する
@@ -48,11 +53,7 @@ namespace UECMediaDesignLab.MidairImagingTools
             var reflection = Vector3.Reflect(diff, normal);
 
             //空中像の結像位置を計算
-            var mdiff = mimc.mmap.transform.position - mimc.display.transform.position;
-            var mnorm = mimc.mmap.transform.forward;
-            // var mreflection = mdiff + 2 * (Vector3.Dot(-mdiff, mnorm)) * mnorm;
-            var mreflection = Vector3.Reflect(mdiff, mnorm);
-            var midairImagePosition = mimc.mmap.transform.position - mreflection;
+            var midairImagePosition = mimc.GetMidairImagePosition();
             
             // Virtual MMAPの位置を、空中像・光源・MMAPの位置関係から計算
             //Virtual MMAPの位置(Displayに対してMMAPと鏡像の位置)を計算
@@ -100,6 +101,42 @@ namespace UECMediaDesignLab.MidairImagingTools
             // Field of view
             var distance = Vector3.Distance(mimc.mmap.transform.position, mainCamera.transform.position);
             virtualCamera.fieldOfView = 2 * Mathf.Atan(mimc.magnification*mimc.mmapScale / (2 * distance)) * Mathf.Rad2Deg;
+        }
+
+        public UserAngle GetUserAngle(){
+            return userAngle;
+        }
+
+        // ユーザーの視点位置を計算する関数
+        public void CalculateUserAngle(){
+            // カメラの座標をローカル座標に変換
+            Vector3 localCameraPosition = transform.InverseTransformPoint(mainCamera.transform.position);
+
+            Vector3 localReferencePosition = transform.InverseTransformPoint(mimc.GetMidairImagePosition());
+
+            Vector3 localDistance = localCameraPosition - localReferencePosition;
+            
+            // 水平距離を計算
+            float horizontalDistance = Mathf.Sqrt(localDistance.x * localDistance.x + localDistance.z * localDistance.z);
+
+            // 仰角を計算
+            float elevation = Mathf.Atan2(localDistance.y, horizontalDistance) * Mathf.Rad2Deg;
+
+            // 方位角を計算
+            float azimuth = Mathf.Atan2(localDistance.x, -localDistance.z) * Mathf.Rad2Deg;
+
+            userAngle = new UserAngle(azimuth, elevation);
+        }
+    }
+
+    // ユーザーの視点位置の情報を持つクラス (空中像装置の位置・向きが基準)
+    public class UserAngle{
+        public float azimuth;
+        public float elevation;
+
+        public UserAngle(float azimuth, float elevation){
+            this.azimuth = azimuth;
+            this.elevation = elevation;
         }
     }
 }

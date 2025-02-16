@@ -45,6 +45,18 @@ Shader "MidairImaging/MidairImageShaderR"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             
+            float MidairImageLuminance;
+
+            float4 AdjustLuminance(float4 color, float luminanceFactor) {
+                float3 rgb;
+                rgb = color.rgb;
+
+                rgb = rgb * luminanceFactor;
+                rgb = pow(rgb, 2.2);
+
+                return float4(rgb, color.a);
+            }
+
 
             v2f vert (appdata v)
             {
@@ -58,6 +70,8 @@ Shader "MidairImaging/MidairImageShaderR"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
+                col = AdjustLuminance(col, MidairImageLuminance);
+                
                 return col;
             }
             ENDCG
